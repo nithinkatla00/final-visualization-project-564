@@ -18,7 +18,7 @@ const PCPPlot = ({ selectedCountry, selectedYear }) => {
       .then((response) => response.json())
       .then((pcaData) => {
         const output = JSON.parse(JSON.stringify(pcaData));
-        PcpChart({ dataPcp: output.data, dimensions: [], selectedYear });
+        PcpChart({ data1: output.data, dimensions: [], selectedYear });
       });
   }, [selectedCountry, selectedYear]);
 

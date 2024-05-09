@@ -11,7 +11,21 @@ const getColor = (val) => {
     return "red";
   }
 };
-export function PcpChart({ dataPcp, dimensions, selectedYear }) {
+export function PcpChart({ data1, dimensions, selectedYear }) {
+  const reorderKeys = (arr, key) => {
+    return arr.map((obj) => {
+      const reorderedObj = { year: obj.year }; // Ensure 'year' key is first
+      for (const k in obj) {
+        if (k !== "year") {
+          reorderedObj[k] = obj[k];
+        }
+      }
+      return reorderedObj;
+    });
+  };
+
+  // Reorder keys in each object of dataPcp
+  const dataPcp = reorderKeys(data1, "year");
   d3.select("#svg_3").html("");
   const currentData = dataPcp.find((el) => el.year === selectedYear);
   const color = getColor(currentData?.happiness_score);

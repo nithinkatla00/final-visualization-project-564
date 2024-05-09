@@ -116,7 +116,7 @@ def calculate_bi_plot_data(data, kValue):
     output2.insert(loc=0, column='Attr', value=listData)
     return output.to_dict('records')
 
-@application.route('/PcpData', methods = ['POST'])
+@application.route('/PcpData', methods=['POST'])
 @cross_origin()
 def PcpData():
     if request.method == 'POST':
@@ -128,14 +128,17 @@ def PcpData():
             data_1 = pd.read_csv('./sustainable-score.csv')
             
             # Filter data for the given year
-            data_1 = data_1[data_1['country'] == country].drop(['country', 'URL'], axis=1)
-
+            filtered_data = data_1[data_1['country'] == country].drop(['country', 'URL'], axis=1)
+            
+            # Move the 'year' column to the front
+            cols = filtered_data.columns.tolist()
+            cols = ['year'] + [col for col in cols if col != 'year']
+            filtered_data = filtered_data[cols]
+            
             # Return data as JSON
-            return jsonify({'data': data_1.to_dict('records')})
-
+            return jsonify({'data': filtered_data.to_dict('records')})
         else:
-            return jsonify({'error': 'No or invalid "post" key found in JSON data'})
-
+            return jsonify({'error': 'No or invalid "country" key found in JSON data'})
 
 if __name__ == "__main__":
     application.run(debug=True, port=5000)
